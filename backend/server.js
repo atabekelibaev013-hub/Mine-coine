@@ -472,4 +472,46 @@ bot.on("message", async (msg) => {
   else if (state.step === "await_auction_hours" && msg.text) {
     const hours = Math.max(0.1, Number(msg.text.trim()) || 24);
     const endTime = Date.now() + hours * 3600 * 1000;
-    db.prepare(`INSERT INTO
+    db.prepare(`INSERT INTO auction_items (title, image_url, price, end_time) VALUES (?, ?, ?, ?)`)
+      .run(state.title, state.imageUrl, state.price, endTime);
+    adminState.delete(chatId);
+    bot.sendMessage(chatId, `✅ Mahsulot qo'shildi: *${state.title}*\nBoshlang'ich narx: ${state.price} 🏅\nTugaydi: ${new Date(endTime).toLocaleString("uz-UZ")}`, { parse_mode: "Markdown" });
+  }
+
+  else if (state.step === "await_new_admin" && msg.text) {
+    const uname = msg.text.trim().replace(/^@/, "");
+    if (!uname) return;
+    db.prepare("INSERT OR REPLACE INTO admins (username, added_by) VALUES (?, ?)").run(uname, username);
+    adminState.delete(chatId);
+    bot.sendMessage(chatId, `✅ @${uname} endi admin. U botga /admin yozganda admin panelni ko'radi (Adminlar menyusidan tashqari).`);
+  }
+});
+
+// Keep admin telegram_id updated whenever they message the bot (needed for notifications)
+bot.on("message", (msg) => {
+  const username = msg.from.username;
+  if (!username) return;
+  const row = db.prepare("SELECT * FROM admins WHERE lower(username) = ?").get(username.toLowerCase());
+  if (row && !row.telegram_id) {
+    db.prepare("UPDATE admins SET telegram_id = ? WHERE username = ?").run(msg.from.id, row.username);
+  }
+});
+
+bot.on("polling_error", (err) => console.error("Polling xatosi:", err.message));
+
+// ================= AUCTION FINALIZER =================
+setInterval(() => {
+  const now = Date.now();
+  const items = db.prepare("SELECT * FROM auction_items WHERE status = 'active' AND end_time <= ?").all(now);
+  for (const it of items) {
+    const winnerUsername = it.last_bidder_username || null;
+    db.prepare("UPDATE auction_items SET status = 'ended', winner_username = ? WHERE id = ?").run(winnerUsername, it.id);
+    if (winnerUsername) {
+      notifyAdmins(`🏆 *Auksion yakunlandi*\n\n@${winnerUsername}\n(${it.title}) yutdi\nNarx: ${it.price} 🏅`);
+    } else {
+      notifyAdmins(`🏆 *Auksion yakunlandi*\n\n(${it.title}) — hech kim taklif bermadi.`);
+    }
+  }
+}, 30 * 1000);
+
+console.log("Bot ishga tushdi ✅");
