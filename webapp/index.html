@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>Mine Coin</title>
+<link rel="stylesheet" href="style.css" />
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+  <div class="app">
+    <!-- TOP BAR -->
+    <div class="topbar">
+      <button class="close-btn" id="closeBtn">✕ Yopish</button>
+      <div class="balance-pill">
+        <span class="diamond">💎</span>
+        <span id="diamondVal">11 200</span>
+        <span class="plus">+</span>
+        <span class="sep"></span>
+        <span class="coin">🏅</span>
+        <span id="coinValTop">15.2K</span>
+      </div>
+      <div class="topbar-icons">⌄ ⋮</div>
+    </div>
+
+    <!-- SCREENS -->
+    <div class="screen" id="screen-tap">
+      <div class="coin-count">🏅 <span id="coinVal">15218</span></div>
+      <div class="tap-badge">📈 Tap x<span id="clickPower">5</span></div>
+      <button class="coin-circle" id="coinCircle">
+        <span class="coin-name" id="charName">LEVI</span>
+        <span class="coin-emoji">👤</span>
+      </button>
+      <div class="mini-btns">
+        <button class="pill-btn" data-tab="boost">🎮 GAME</button>
+        <button class="pill-btn" id="openShopBtn">🏪 SHOP</button>
+      </div>
+      <div class="energy-wrap">
+        <div class="energy-label"><span>⚡ ENERGY</span><span id="energyVal">0 / 1000</span></div>
+        <div class="energy-bar"><div class="energy-fill" id="energyFill"></div></div>
+        <button class="gold-btn" id="refillBtn">💎 20 → +500 ENERGY</button>
+      </div>
+    </div>
+
+    <div class="screen hidden" id="screen-boost">
+      <button class="wheel-banner" id="wheelBannerBtn">
+        <span>💎 Olmos barabani</span><span>›</span>
+      </button>
+      <div class="list" id="boostList"></div>
+    </div>
+
+    <div class="screen hidden" id="screen-tasks">
+      <div class="card">
+        <div class="card-label">KUNLIK BONUS KODINGIZ</div>
+        <div class="code-row">
+          <div class="code-box">PE35918AB</div>
+          <button class="gold-btn small" id="dailyBtn">▷ Ishlatish</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title-row"><span>Vazifalar</span><span class="badge" id="taskCount">5</span></div>
+        <div id="taskList"></div>
+      </div>
+    </div>
+
+    <div class="screen hidden" id="screen-auction">
+      <div class="switch">
+        <button class="switch-btn active" data-sub="active">FAOL</button>
+        <button class="switch-btn" data-sub="done">TUGAGAN</button>
+      </div>
+      <div class="list" id="auctionList"></div>
+    </div>
+
+    <div class="screen hidden" id="screen-profile">
+      <div class="uzs-label">UZS</div>
+      <div class="uzs-val"><span id="uzsVal">4 000</span> UZS</div>
+      <div class="two-col">
+        <button class="green-btn" id="depositBtn">💳 Pul kiritish</button>
+        <button class="gold-btn" id="withdrawBtn">🧾 Pul chiqarish</button>
+      </div>
+      <div class="list" id="profileList"></div>
+    </div>
+
+    <!-- BOTTOM NAV -->
+    <div class="bottomnav">
+      <button class="nav-item active" data-tab="boost"><span>🚀</span>BOOST</button>
+      <button class="nav-item" data-tab="tasks"><span>✅</span>VAZIFALAR</button>
+      <button class="nav-item" data-tab="tap"><span>🎯</span>BOSISH</button>
+      <button class="nav-item" data-tab="auction"><span>🔨</span>AUKSION</button>
+      <button class="nav-item" data-tab="profile"><span>👤</span>PROFIL</button>
+    </div>
+
+    <!-- MODALS -->
+    <div class="modal-overlay hidden" id="shopModal">
+      <div class="modal">
+        <div class="modal-head">
+          <div><div class="modal-eyebrow">MINE COIN DO'KON</div><div class="modal-title">Olmos bilan xarid qiling</div></div>
+          <button class="x-btn close-modal">✕</button>
+        </div>
+        <div class="grid2" id="shopGrid"></div>
+      </div>
+    </div>
+
+    <div class="modal-overlay hidden" id="depositModal">
+      <div class="modal">
+        <div class="modal-head">
+          <div><div class="modal-title">Pul kiritish</div><div class="modal-sub">Valyutani tanlab to'lov miqdorini kiriting</div></div>
+          <button class="x-btn close-modal">✕</button>
+        </div>
+        <div class="modal-label">MIQDOR</div>
+        <div class="input-row"><input type="number" id="depositInput" placeholder="0" /><span>UZS</span></div>
+        <button class="gold-btn full" id="depositConfirm">To'lov qilish</button>
+      </div>
+    </div>
+
+    <div class="modal-overlay hidden" id=
