@@ -1,4 +1,4 @@
-// ⚠️ Backend'ni Render'ga joylagach, shu manzilni almashtiring:
+const API_BASE = "https://SIZNING-BACKEND.onrender.com";
 const API_BASE = "https://SIZNING-BACKEND.onrender.com";
 
 const tg = window.Telegram ? window.Telegram.WebApp : null;
