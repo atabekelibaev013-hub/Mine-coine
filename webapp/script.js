@@ -1,6 +1,4 @@
-const API_BASE = "https://SIZNING-BACKEND.onrender.com";
-const API_BASE = "https://SIZNING-BACKEND.onrender.com";
-
+const API_BASE = "https://mine-coine-1.onrender.com";
 const tg = window.Telegram ? window.Telegram.WebApp : null;
 if (tg) { tg.ready(); tg.expand(); }
 
